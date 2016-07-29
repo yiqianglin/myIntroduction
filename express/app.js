@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var engine = require('consolidate');
 
 var mongoose = require('./config/mongoose_db.js');     //mongoose_db导入，已经连接好的db
 var db = mongoose();
@@ -16,7 +17,11 @@ var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+//app.set('view engine', 'jade');
+app.set('views', __dirname + '/views');
+app.engine('html', engine.mustache);
+//app.set('view engine', 'html');
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -61,5 +66,12 @@ app.use(function(err, req, res, next) {
   });
 });
 
+
+
+
+app.use(function(err, req, res, next){
+  console.log('所有中间件都执行');
+  next();
+})
 
 module.exports = app;
